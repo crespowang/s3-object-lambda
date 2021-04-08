@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.881.0",
+    "axios": "^0.21.1"
+  },
+  "devDependencies": {
+    "typescript": "4.2.3",
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
+    "@babel/node": "^7.13.13",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/aws-lambda": "^8.10.73",
+    "@types/node": "^14.14.37"
+  },
+  "scripts": {
+    "create-role": "aws iam create-role --role-name functionRole --assume-role-policy-document file://src/iam-policy.json",
+    "package": "rm -rf build function.zip && yarn babel src --extensions '.ts' -d ./build &&  yarn install --prod && zip -ur function.zip build node_modules",
+    "update-function": "aws lambda update-function-code --function-name object-function --zip-file fileb://function.zip --region ap-southeast-2",
+    "create-function": "aws lambda create-function --function-name object-function --zip-file fileb://function.zip --region ap-southeast-2 --runtime nodejs14.x --role arn:aws:iam::186519255627:role/functionRole --handler build/index.handler"
+  },
+  "name": "s3-object-lambda",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:crespowang/s3-object-lambda.git",
+  "author": "Crespo Wang <crespo.wang@inquisitive.com>",
+  "license": "MIT"
+}
